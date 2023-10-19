@@ -7,16 +7,22 @@
     <script type="module">
       import { io } from "https://cdn.socket.io/4.3.2/socket.io.esm.min.js";
       const socket = io();
-      const form = document.getElementById('form');
-      const input = document.getElementById('input')
+      const form = document.getElementById("form");
+      const input = document.getElementById("input");
+      const messages = document.getElementById("messages");
 
-      form.addEventListener('submit', (e)=>{
-        e.preventDefault()
-        if(input.value){
-          socket.emit('chat mensaje', input.value)
-          input.value = '';
+      socket.on("chat mensaje", (msg) => {
+        const item = `<li>${msg}</li>`;
+        messages.insertAdjacentHTML('beforeend', item);
+      });
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (input.value) {
+          socket.emit("chat mensaje", input.value);
+          input.value = "";
         }
-      })
+      });
     </script>
     <style>
       *,
@@ -49,7 +55,7 @@
         position: relative;
       }
 
-      #form{
+      #form {
         bottom: 0;
         display: flex;
         height: 48px;
@@ -59,18 +65,18 @@
         right: 0;
       }
 
-      #input{
+      #input {
         border-radius: 9999px;
         border: 1px solid #eee;
         flex: 1;
         margin: 4px;
         padding: 0 8px;
       }
-      #input:focus{
+      #input:focus {
         outline: 0;
       }
 
-      #form > button{
+      #form > button {
         background: #09f;
         color: white;
         border: 0;
@@ -78,14 +84,14 @@
         border-radius: 4px;
       }
 
-      #form > button:hover{
+      #form > button:hover {
         background: #0cf;
       }
-
     </style>
   </head>
   <body>
     <section id="chat">
+      <ul id="messages"></ul>
       <form id="form">
         <input
           type="text"
